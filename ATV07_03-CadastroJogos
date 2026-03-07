@@ -1,0 +1,135 @@
+/*
+ * GerencJogos.c
+ *
+ *  Created on: 7 de mar. de 2026
+ *      Author: Petrus Garcia
+ */
+# include <stdio.h>
+
+// status da disponibilidade do jogo
+typedef enum{
+	Disponivel,
+	Esgotado,
+	Reserva
+}StatusJogo;
+
+// Informações sobre o Jogo
+typedef struct{
+	char nome[100];
+	int unidade;
+	char console[50];
+	StatusJogo status; //Disponivel para compra, Esgotado, Reserva
+} Jogo;
+
+// Endereco do cliente
+typedef struct{
+	char cidade[50];
+	char rua[100];
+	int numcasa;
+}Endereco;
+
+// Informações sobre o Cliente
+typedef struct{
+	char nome[150];
+	char cpf[15];
+	char dtnascimento[11];
+	Endereco endereco;
+} Cliente;
+
+// Função para Exibir o Jogo
+void ExibirJogo(Jogo j){
+	printf("---- Jogos ----\n");
+	printf("Jogo: %s | Status: ", j.nome);
+	if(j.status == Disponivel){
+		printf("Disponivel para compra\n");
+	}
+	else if(j.status == Esgotado){
+		printf("Esgotado\n");
+	}
+	else if(j.status == Reserva){
+		printf("Disponivel para reserva\n");
+	}
+}
+
+// Função para cadastrar o cliente
+void Cadastrar(Cliente *c){
+	printf("---- Cadastro Cliente ----\n");
+    printf("Digite o Nome Completo:\n");
+    scanf(" %[^\n]s", c->nome); //%[^\n]s linha inteira, incluindo espaços
+    printf("Digite o CPF:\n");
+    scanf(" %s", c->cpf);
+    printf("Digite a data de nascimento:\n");
+    scanf(" %s", c->dtnascimento);
+    printf("Digite o nome da cidade:\n");
+    scanf(" %s", c->endereco.cidade);
+    printf("Digite o nome da rua:\n");
+    scanf(" %s", c->endereco.rua);
+    printf("Digite o numero da sua casa:\n");
+    scanf(" %d", &c->endereco.numcasa);
+
+}
+
+// Função para cadastrar o jogo
+void CadastrarJogos(Jogo *j){
+	printf("---- Cadastro Cliente ----\n");
+    printf("Digite o Nome do Jogo:\n");
+    scanf(" %[^\n]s", j->nome); //%[^\n]s linha inteira, incluindo espaços
+    printf("Digite a quantia de copias disponiveis:\n");
+    scanf(" %d", &j->unidade);
+    printf("Digite o console da copia fisica:\n");
+    scanf(" %s", j->console);
+
+    // Garantia do funcionamento do cadastro do status do jogo
+    do {
+    	printf("Digite o status do jogo:\n");
+    	printf("0 - Disponivel\n");
+        printf("1 - Esgotado\n");
+	    printf("2 - Reserva\n");
+	    scanf(" %d", (int *)&j->status);
+
+        if (j->status < 0 || j->status > 2) {
+            printf("\nOpcao invalida! Tente novamente.\n");
+        }
+
+    } while (j->status < 0 || j->status > 2);
+
+}
+
+int main(){
+	setvbuf(stdout, NULL, _IONBF, 0);
+
+	Cliente cliente;
+	Jogo jogo;
+	int menu = 9;
+
+	while(menu != 0){
+		printf("\n=== SISTEMA DE JOGOS ===\n");
+		printf("1 - Cadastrar Cliente\n");
+        printf("2 - Cadastrar Jogo\n");
+        printf("3 - Exibir Jogo\n");
+        printf("0 - Sair\n");
+        printf("Escolha: \n");
+        scanf(" %d", &menu);
+
+        // Puxando as funções para o uso no console
+        switch (menu){
+        	case 1:
+        		Cadastrar(&cliente);
+        		break;
+        	case 2:
+        		CadastrarJogos(&jogo);
+        		break;
+        	case 3:
+        		ExibirJogo(jogo);
+        		break;
+        	case 0:
+        		printf("Saindo... \n");
+        		break;
+        	default:
+        		printf("Opcao Invalida");
+
+        }
+	}
+
+	return 0;
+}
